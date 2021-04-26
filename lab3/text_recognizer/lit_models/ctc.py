@@ -47,6 +47,7 @@ class CTCLitModel(BaseLitModel):  # pylint: disable=too-many-ancestors
         # https://pytorch.org/docs/stable/generated/torch.nn.CTCLoss.html
 
         ignore_tokens = [start_index, end_index, self.padding_index]
+        # 새로 사용되는 metric
         self.val_cer = CharacterErrorRate(ignore_tokens)
         self.test_cer = CharacterErrorRate(ignore_tokens)
 

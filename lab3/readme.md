@@ -67,15 +67,19 @@ With this, we can get to 90% accuracy.
 Note that we are still using the `BaseLitModel` with the default `cross_entropy` loss function.
 From reading [PyTorch docs](https://pytorch.org/docs/stable/nn.functional.html#cross-entropy) on the function, we can see that it accepts multiple labels per example just fine -- it's called "K-dimensional" loss.
 
-### Changing window_stride
+### Changing window_stride -> 조금씩 겹치도록
 
 Let's go ahead and change window_stride, such that we are sampling overlapping windows.
 
 ```sh
 python training/run_experiment.py --max_epochs=10 --gpus=1 --num_workers=4 --data_class=EMNISTLines --min_overlap=0 --max_overlap=0 --model_class=LineCNNSimple --window_width=28 --window_stride=20
 ```
+> ValueError: Expected target size (128, 44), got torch.Size([128, 32])
+- (batch size, sequence length)
 
 Oops! That errored. We need add one more flag: `--limit_output_length`, since with the new stride, our model outputs a different length sequence than our ground truth expects (this will not be a problem once we start using CTC loss).
+> `LineCNNSample` 의 `forward` 확인 -> output 어떻게 나오는지?
+
 
 ```sh
 python training/run_experiment.py --max_epochs=10 --gpus=1 --num_workers=4 --data_class=EMNISTLines --min_overlap=0 --max_overlap=0 --model_class=LineCNNSimple --window_width=28 --window_stride=20 --limit_output_length
@@ -90,6 +94,7 @@ To match our new `window_stride`, we can have our synthetic dataset overlap by 0
 ```sh
 python training/run_experiment.py --max_epochs=10 --gpus=1 --num_workers=4 --data_class=EMNISTLines --min_overlap=0.25 --max_overlap=0.25 --model_class=LineCNNSimple --window_width=28 --window_stride=20 --limit_output_length
 ```
+> `overlap` parameter: `emnist_lines.py` 에서 확인
 
 This will get accuracy into the 80%'s.
 
@@ -110,6 +115,7 @@ Best accuracy I get is ~60%.
 ## LineCNN: making things more efficient
 
 The simple implementation of a line-reading CNN above works fine, but it's highly inefficient if `window_stride` is less than `window_width`, because it send each window through the CNN separately.
+> `LineCNNSimple`: overlapping 되는 부분도 각각 다 계산해서
 
 We can improve on this with a fully-convolutional model, `LineCNN`.
 

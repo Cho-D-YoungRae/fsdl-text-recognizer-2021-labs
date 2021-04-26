@@ -12,7 +12,6 @@ WINDOW_STRIDE = 28
 
 
 class LineCNNSimple(nn.Module):
-    """LeNet based model that takes a line of width that is a multiple of CHAR_WIDTH."""
 
     def __init__(
         self,
@@ -36,11 +35,17 @@ class LineCNNSimple(nn.Module):
         ----------
         x
             (B, C, H, W) input image
+            # Batch, Channel, Height, Width 
+            # width 는 다르다 -> 이전에 봤던 것 처럼 28 * 28 아님. 긴 이미지
+            # height = 28
+            # channel 은 1 -> gray scale
 
         Returns
         -------
         torch.Tensor
+            
             (B, C, S) logits, where S is the length of the sequence and C is the number of classes
+            # Batch, num of Classes, Sequence length
             S can be computed from W and CHAR_WIDTH
             C is self.num_classes
         """
@@ -66,12 +71,14 @@ class LineCNNSimple(nn.Module):
     @staticmethod
     def add_to_argparse(parser):
         CNN.add_to_argparse(parser)
+        # cnn적용할 window (slide) width
         parser.add_argument(
             "--window_width",
             type=int,
             default=WINDOW_WIDTH,
             help="Width of the window that will slide over the input image.",
         )
+        # stride
         parser.add_argument(
             "--window_stride",
             type=int,
@@ -80,3 +87,6 @@ class LineCNNSimple(nn.Module):
         )
         parser.add_argument("--limit_output_length", action="store_true", default=False)
         return parser
+
+        # 28 * 28 사이즈의 윈도우에 stride가 28 이면 겹치는 부분 없이 진행
+        # 14 이면 14 만큼 겹쳐지면서 진행

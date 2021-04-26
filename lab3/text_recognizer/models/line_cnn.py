@@ -76,7 +76,7 @@ class LineCNN(nn.Module):
         self.convs = nn.Sequential(
             ConvBlock(1, conv_dim),
             ConvBlock(conv_dim, conv_dim),
-            ConvBlock(conv_dim, conv_dim, stride=2),
+            ConvBlock(conv_dim, conv_dim, stride=2), # LineCNNSimple에서는 maxpooling 사용
             ConvBlock(conv_dim, conv_dim),
             ConvBlock(conv_dim, conv_dim * 2, stride=2),
             ConvBlock(conv_dim * 2, conv_dim * 2),
@@ -93,7 +93,7 @@ class LineCNN(nn.Module):
         self._init_weights()
 
     def _init_weights(self):
-        """
+        """ 
         Initialize weights in a better way than default.
         See https://github.com/pytorch/pytorch/issues/18182
         """
