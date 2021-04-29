@@ -1,4 +1,5 @@
 # Full Stack Deep Learning Spring 2021 Labs
+> 강의 보면서 직접 공부해보기
 
 Welcome!
 
