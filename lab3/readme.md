@@ -1,4 +1,5 @@
 # Lab 3: Using CNN + LSTM with CTC loss for line text recognition
+> colab 환경에서 진행하는데 ctc loss 가 실행이 되지 않는 문제가 발생하였다. 로컬에서는 된다고 하는 듯 하여 로컬에서 환경을 맞추려 해봤으나 pytorch_lightning이 m1 맥북 환경에서 설치 되지 않는 듯 하다...(정확하지는 않음)
 
 ## Goals
 

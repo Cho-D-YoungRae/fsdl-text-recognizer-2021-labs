@@ -93,6 +93,8 @@ python3 training/run_experiment.py --model_class=CNN --data_class=EMNIST --max_e
 
 One way we can make sure that our GPU stays consistently highly utilized is to do data pre-processing in separate worker processes, using the `--num_workers=X` flag.
 
+데이터를 cpu에서 처리해서 gpu로 보내줘야 한다. 데이터 처리를 많은 cpu thread에서 하여 gpu가 기다리지 않도록 한다.
+
 ```sh
 python3 training/run_experiment.py --model_class=CNN --data_class=EMNIST --max_epochs=5 --gpus=1 --num_workers=4
 ```
